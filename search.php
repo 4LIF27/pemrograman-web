@@ -99,9 +99,9 @@ require_once "assets/dbmain/connect.php";
 
           <div class="row mb-3">
             <?php
-              if (isset($_GET["filter"])) {
-                $filter = mysqli_escape_string(conn(), $_GET["filter"]);
-                $berita = mysqli_query(conn(), "SELECT * FROM berita WHERE id_kategori = '$filter'");
+              if (isset($_GET["vsearch"])) {
+                $filter = mysqli_escape_string(conn(), $_GET["vsearch"]);
+                $berita = mysqli_query(conn(), "SELECT * FROM `berita` WHERE `judul` LIKE '%$filter%'");
                 if (mysqli_num_rows($berita) == 0) {
                   ?>
                   <div class="text-centers">
@@ -127,31 +127,13 @@ require_once "assets/dbmain/connect.php";
                   }
                 }
               } else {
-                $berita = mysqli_query(conn(), "SELECT * FROM berita");
-                if (mysqli_num_rows($berita) == 0) {
-                  ?>
-                  <div class="text-centers">
+                ?>
+                <div class="text-centers">
                     <div class="alert alert-warning">
-                      <strong>Maaf sepertinya halaman yang anda akses belum ada ditambahkan oleh admin / konten saat ini tidak tersedia. coba lagi dihari lain</strong>
+                        <strong>Maaf sepertinya halaman yang anda akses belum ada ditambahkan oleh admin / konten saat ini tidak tersedia. coba lagi dihari lain</strong>
                     </div>
-                  </div>
-                  <?php
-                } else {
-                  while ($z = mysqli_fetch_assoc($berita)) {
-                    ?>
-                    <div class="col-xl-3 col-md-6 mb-4">
-                      <a href="read.php?idberita=<?= $z["id_berita"] ?>" class="text-decoration-none text-secondary">
-                        <div class="card rounded">
-                          <img src="../assets/<?= $z["gambar"] ?>" alt="" class="card-img-top w-100 h-75 text-centers">
-                          <div class="card-body">
-                            <div class="text-lg font-weight-bold text-capitalize mb-1"><?= $z["judul"] ?></div>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-                    <?php
-                  }
-                }
+                </div>
+                <?php
               }
             ?>
           </div>

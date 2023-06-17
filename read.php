@@ -1,5 +1,9 @@
 <?php
+if (!isset($_GET["idberita"])) {
+    header("Location: index.php"); die();
+}
 require_once "assets/dbmain/connect.php";
+error_reporting(0);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +17,7 @@ require_once "assets/dbmain/connect.php";
   <title>BeritaKini - Home</title>
   <link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-  <link href="assets/css/beritakini.min.css" rel="stylesheet">
+  <link href="assets/css/beritakini.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -92,70 +96,50 @@ require_once "assets/dbmain/connect.php";
         <!-- Topbar -->
 
         <!-- Container Fluid-->
+        <?php
+        $idberita = mysqli_escape_string(conn(), $_GET["idberita"]);
+        $oke = mysqli_query(conn(), "SELECT * FROM berita WHERE id_berita = '$idberita'");
+        $fetch = mysqli_fetch_assoc($oke);
+        ?>
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Berita Terkini</h1>
+            <h4 class="h3 mb-0 text-gray-800"><?= $fetch["judul"] ?></h4>
           </div>
 
-          <div class="row mb-3">
-            <?php
-              if (isset($_GET["filter"])) {
-                $filter = mysqli_escape_string(conn(), $_GET["filter"]);
-                $berita = mysqli_query(conn(), "SELECT * FROM berita WHERE id_kategori = '$filter'");
-                if (mysqli_num_rows($berita) == 0) {
-                  ?>
-                  <div class="text-centers">
-                    <div class="alert alert-warning">
-                      <strong>Maaf sepertinya halaman yang anda akses belum ada ditambahkan oleh admin / konten saat ini tidak tersedia. coba lagi dihari lain</strong>
-                    </div>
-                  </div>
-                  <?php
-                } else {
-                  while ($z = mysqli_fetch_assoc($berita)) {
-                    ?>
-                    <div class="col-xl-3 col-md-6 mb-4">
-                      <a href="read.php?idberita=<?= $z["id_berita"] ?>" class="text-decoration-none text-secondary">
-                        <div class="card rounded">
-                          <img src="../assets/<?= $z["gambar"] ?>" alt="" class="card-img-top w-100 h-75 text-centers">
-                          <div class="card-body">
-                            <div class="text-lg font-weight-bold text-capitalize mb-1"><?= $z["judul"] ?></div>
-                          </div>
+          <div class="row mb-5">
+            <div class="col">
+                <?php
+                    if (mysqli_num_rows($oke) == 0) {
+                        ?>
+                        <div class="text-centers">
+                            <div class="alert alert-warning">
+                                <strong>Maaf sepertinya halaman yang anda akses belum ada ditambahkan oleh admin / konten saat ini tidak tersedia. coba lagi dihari lain</strong>
+                            </div>
                         </div>
-                      </a>
-                    </div>
-                    <?php
-                  }
-                }
-              } else {
-                $berita = mysqli_query(conn(), "SELECT * FROM berita");
-                if (mysqli_num_rows($berita) == 0) {
-                  ?>
-                  <div class="text-centers">
-                    <div class="alert alert-warning">
-                      <strong>Maaf sepertinya halaman yang anda akses belum ada ditambahkan oleh admin / konten saat ini tidak tersedia. coba lagi dihari lain</strong>
-                    </div>
-                  </div>
-                  <?php
-                } else {
-                  while ($z = mysqli_fetch_assoc($berita)) {
-                    ?>
-                    <div class="col-xl-3 col-md-6 mb-4">
-                      <a href="read.php?idberita=<?= $z["id_berita"] ?>" class="text-decoration-none text-secondary">
-                        <div class="card rounded">
-                          <img src="../assets/<?= $z["gambar"] ?>" alt="" class="card-img-top w-100 h-75 text-centers">
-                          <div class="card-body">
-                            <div class="text-lg font-weight-bold text-capitalize mb-1"><?= $z["judul"] ?></div>
-                          </div>
+                        <?php
+                    } else {
+                        ?>
+                        <div class="text-centers">
+                            <div class="mt-2 mb-4 text-center">
+                                <img src="assets/<?= $fetch["gambar"] ?>" alt="" class="text-centers img-fluid rounded">
+                                <p class="text-mdd text-gray-500 message-time font-weight-bold mt-1">Di publish pada <?= $fetch["tgl_berita"] ?></p>
+                            </div>
                         </div>
-                      </a>
-                    </div>
-                    <?php
-                  }
-                }
-              }
-            ?>
+                        <div class="mt-2">
+                            <?php
+                                $splt = explode("\n", $fetch["berita"]);
+                                foreach ($splt as $text) {
+                                    ?>
+                                    <h6 class="text-secondary message-title mb-2"><?= $text; ?></h6>
+                                    <?php
+                                }
+                            ?>
+                        </div>
+                        <?php
+                    }
+                ?>
+            </div>
           </div>
-
         </div>
         <!---Container Fluid-->
       </div>

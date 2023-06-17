@@ -86,7 +86,7 @@ $fetch = mysqli_fetch_assoc($searchs);
                       <div class="card-body">
                         <div class="text-mdd font-weight-bold text-capitalize mb-1"><?= $z["judul"] ?></div>
                         <div class="mt-4 d-flex justify-content-end">
-                          <a href="" class="btn btn-warning btn-sm mr-2"><i class="fas fa-pencil-alt"></i></a>
+                          <a href="/admin/update/?id=<?= $z["id_berita"] ?>" class="btn btn-warning btn-sm mr-2"><i class="fas fa-pencil-alt"></i></a>
                           <a href="delete.php?id=<?= $z["id_berita"] ?>" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
                         </div>
                       </div>

@@ -33,6 +33,16 @@ a:focus {
   margin-top: -5% !important;
 }
 
+.awesome-code {
+  padding: 10px;
+  width: 80% !important;
+  color: #fff !important;
+  border-radius: 3px;
+  background-color: #212121;
+  border-left: 10px solid #303f9f !important;
+  margin-left: 3% !important;
+}
+
 #wrapper #content-wrapper {
   background-color: #fafdfb;
   width: 100%;
